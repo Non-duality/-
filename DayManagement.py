@@ -2,8 +2,8 @@ import sys
 from datetime import datetime, time
 from functools import partial
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QRect
-from PyQt5.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QTextEdit, \
-    QVBoxLayout, QMessageBox, QScrollArea
+from PyQt5.QtWidgets import *
+from main import MainWindow as mw
 import time as stime
 import sort_util
 
@@ -75,8 +75,8 @@ class DayManagement(QWidget):
     task_list = []
     thread_count = 0
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super(DayManagement, self).__init__(parent)
         # 시작할때 initUI를 불러온다
         self.initUI()
 
@@ -156,7 +156,6 @@ class DayManagement(QWidget):
 
         self.setLayout(grid)
         self.setGeometry(300, 300, 540, 300)
-        self.show()
 
     def see_task_list(self):
         '''
@@ -177,7 +176,7 @@ class DayManagement(QWidget):
                                                                   minutes=self.set_time_minutes.text())
             # am_or_pm:시간:분 : 할일 해서 딕셔너리로 저장
             time_and_task = {hours_minutes: self.set_task_text.toPlainText()}
-
+            
             # 시간과 할일을 task_list에 저장한다
             sort_task_list.append(time_and_task)
             sort_task_list = sort_util.task_list_sort(sort_task_list)
@@ -292,6 +291,8 @@ class TaskList(QWidget):
             # 시간, 분을 넣을 text창
             self.task_time_hours[index] = QLineEdit()
             self.task_time_minutes[index] = QLineEdit()
+            
+            
 
             # task의 PM이면 토글버튼에 PM, AM이면 AM 설정
             if am_or_pm == 'PM':
@@ -403,9 +404,3 @@ class TaskList(QWidget):
                 else:
                     self.task_delete(item.layout(), key, remove=False)
                     # 레이아웃 재 설정
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = DayManagement()
-    sys.exit(app.exec())
