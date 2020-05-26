@@ -6,9 +6,13 @@ from PyQt5.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushBut
     QVBoxLayout, QMessageBox, QScrollArea
 import time as stime
 import sort_util
+import telegram
 
 sort_task_list = []
 
+token = '1055111326:AAENjj3nlcckuOSGnNVhd_wizU7veBGhqUs'    # token 변수에 텔레그램 토큰값 입력
+bot = telegram.Bot(token=token) # 텔레그램 봇에 token 변수에 저장한 토큰값 전송
+ID = '1199692231' # chat_id 저장을 위한 변수
 
 class TimeThread(QThread):
     """
@@ -58,7 +62,8 @@ class TimeThread(QThread):
             # 현재 시간 분을 받아옴
             now_hour = datetime.today().time().hour
             now_minute = datetime.today().time().minute
-            stime.sleep(30)
+            # 새로고침 시간 30초 -> 5초로 변경
+            stime.sleep(5)
             # 현재시각을 task_list 제일 처음의 시각을 받아서 비교해서 시간과 분이 같으면 메세지 실행
             if now_hour == hour and now_minute == minute:
                 # print(datetime.today().time())
@@ -204,7 +209,15 @@ class DayManagement(QWidget):
 
     def open_message_box(self):
         global sort_task_list
+        #time = list(sort_task_list[0].keys())[0]
+        #task = list(sort_task_list[0].values())[0]
+        
+        # 사용자 id 에 종합 변수에 지정한 텍스트 전송
+        bot.sendMessage(chat_id = ID, text='테스트 메시지')
+        
         # alert은 밑에 알림창을 울리게 함 그리고 이 메시지 박스는 내가 보고 있는 화면에 띄워짐
+        #QApplication.alert(QMessageBox.about(self, 'Message', '{time}\n{task}'.format( \time,task)))
+                                            
         QApplication.alert(QMessageBox.about(self, 'Message', '{time}\n{task}'.format( \
                                             time=list(sort_task_list[0].keys())[0],
                                             task=list(sort_task_list[0].values())[0])))
@@ -221,7 +234,7 @@ class DayManagement(QWidget):
             # am_or_pm_toggle_buotton버튼의 텍스를 PM으로 변경
             self.am_or_pm_toggle_button.setText('PM')
             self.am_pm_toggle_value = 'PM'
-
+            
     def time_check(self, am_pm, hour, minute):
         # 현재 시간을 받아옴
         now_hour, now_minute = datetime.today().time().hour, datetime.today().time().minute
