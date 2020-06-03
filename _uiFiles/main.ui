@@ -10,93 +10,264 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>842</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QCalendarWidget" name="calendarWidget">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>451</width>
+      <width>421</width>
       <height>571</height>
      </rect>
     </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QCalendarWidget" name="calendarWidget">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QFrame" name="gridFrame_2">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>460</y>
-      <width>231</width>
-      <height>61</height>
+      <x>422</x>
+      <y>0</y>
+      <width>420</width>
+      <height>570</height>
      </rect>
     </property>
+    <property name="minimumSize">
+     <size>
+      <width>420</width>
+      <height>570</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>420</width>
+      <height>570</height>
+     </size>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::DefaultContextMenu</enum>
+    </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 10pt &quot;나눔스퀘어 Bold&quot;;</string>
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
-    <property name="text">
-     <string>일정 추가</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="title_label">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>10</y>
-      <width>351</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 81 15pt &quot;나눔스퀘어 ExtraBold&quot;;
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>420</width>
+         <height>0</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="7" column="0">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>420</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="title_label">
+       <property name="minimumSize">
+        <size>
+         <width>420</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>420</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 81 15pt &quot;나눔스퀘어 ExtraBold&quot;;
 </string>
-    </property>
-    <property name="text">
-     <string>Task List</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="time_label">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>70</y>
-      <width>351</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 75 9pt &quot;나눔바른펜&quot;;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="task_label">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>130</y>
-      <width>351</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>Task List</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="task_label">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QFrame" name="horizontalFrame">
+       <property name="minimumSize">
+        <size>
+         <width>420</width>
+         <height>90</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>420</width>
+         <height>90</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>65</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>65</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 75 10pt &quot;나눔스퀘어 Bold&quot;;
+background-color: rgb(255, 255, 255);
+border-radius: 5px;
+border-style: solid;
+border-width: 1px;
+border-color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>일정 추가</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="time_label">
+       <property name="minimumSize">
+        <size>
+         <width>420</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>420</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 75 9pt &quot;나눔바른펜&quot;;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QFrame" name="horizontalFrame_2">
+       <property name="minimumSize">
+        <size>
+         <width>420</width>
+         <height>15</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>420</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="color_line">
+          <property name="minimumSize">
+           <size>
+            <width>280</width>
+            <height>7</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>280</width>
+            <height>7</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 5px;
+border-style: solid;
+border-width: 1px;
+border-color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
