@@ -7,6 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 import time as stime
 import sort_util
+import pickle
 
 sort_task_list = []
 sub_ui = uic.loadUiType('_uiFiles/sub.ui')[0]
@@ -78,13 +79,31 @@ class TimeThread(QThread):
                 # os.system('open /Users/goseonghyeon/study/ScheduleManagement/black.mp3')
                 stime.sleep(0.5)
                 sort_task_list.pop(0)
+                with open("task.pkl", 'wb') as f:
+                    pickle.dump(sort_task_list, f)
+            
+            if year == now_year and month == now_month and day == now_day:
+                if hour < now_hour :
+                    sort_task_list.pop(0)
+                    with open("task.pkl", 'wb') as f:
+                        pickle.dump(sort_task_list, f)
+                elif minute < now_hour :
+                    sort_task_list.pop(0)
+                    with open("task.pkl", 'wb') as f:
+                        pickle.dump(sort_task_list, f)
 
             if year < now_year :
                 sort_task_list.pop(0)
+                with open("task.pkl", 'wb') as f:
+                    pickle.dump(sort_task_list, f)
             elif month < now_month :
                 sort_task_list.pop(0)
+                with open("task.pkl", 'wb') as f:
+                    pickle.dump(sort_task_list, f)
             elif day < now_day :
                 sort_task_list.pop(0)
+                with open("task.pkl", 'wb') as f:
+                    pickle.dump(sort_task_list, f)
 
 
 class DayManagement(QWidget, sub_ui):
@@ -119,6 +138,13 @@ class DayManagement(QWidget, sub_ui):
         시간과 할일 목록을 저장하는 함수
         '''
         global sort_task_list
+        
+        with open("task.pkl", "rb") as f:
+            while True:
+                try:
+                    sort_task_list = pickle.load(f)
+                except EOFError:
+                    break
         if self.time_check(self.am_pm_toggle_value, self.set_time_hours.text(), self.set_time_minutes.text()):
             # am_pm을 받고 ap_or_pm:시간:분 저장
             year_month_day = "{year}:{month}:{day}:{week}".format(year = self.text_year.text(),
@@ -137,6 +163,10 @@ class DayManagement(QWidget, sub_ui):
             # 시간과 할일을 task_list에 저장한다
             sort_task_list.append(overall_task)
             sort_task_list = sort_util.date_sort(sort_task_list)
+
+            print(sort_task_list)
+            with open("task.pkl", 'wb') as f:
+                    pickle.dump(sort_task_list, f)
 
             # 시간과 할일을 저장 후에 text 칸을 clear 시킨다
             self.set_time_hours.clear()
