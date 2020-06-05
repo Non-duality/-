@@ -4,8 +4,9 @@ import pickle
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5 import uic
+from PyQt5 import uic, QtCore
 from DayManagement import *
+
 main_ui = uic.loadUiType('_uiFiles/main.ui')[0]
 
 class MainWindow (QMainWindow, main_ui):
