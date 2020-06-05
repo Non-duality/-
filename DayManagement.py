@@ -27,11 +27,16 @@ class TimeThread(QThread):
         super().__init__()
 
     def __del__(self):
-        self.wait()
+        pass
 
     def latest_task_time(self):
         with open("task.pkl", "rb") as f:
-            sort_task_list = pickle.load(f)
+            while True:
+                try:
+                    sort_task_list = pickle.load(f)
+                except EOFError:
+                    sort_task_list = []
+                    break
         # sort_task_list의 첫 번쨰 키를 : 스플릿 함
         latest_time_keys = list(list(sort_task_list[0].values())[0].keys())[0].split(':')
 
@@ -59,7 +64,13 @@ class TimeThread(QThread):
         # 시간을 체크함
         while True:
             with open("task.pkl", "rb") as f:
-                sort_task_list = pickle.load(f)
+                while True:
+                    try:
+                        sort_task_list = pickle.load(f)
+                    except EOFError:
+                        sort_task_list = []
+                        break
+        # sort_task_list의 첫
   
             print(sort_task_list)
             if sort_task_list == []:
@@ -145,6 +156,7 @@ class DayManagement(QWidget, sub_ui):
                 try:
                     sort_task_list = pickle.load(f)
                 except EOFError:
+                    sort_task_list = []
                     break
 
         if self.time_check(self.am_pm_toggle_value, self.set_time_hours.text(), self.set_time_minutes.text()):
@@ -181,7 +193,13 @@ class DayManagement(QWidget, sub_ui):
 
     def open_message_box(self):
         with open("task.pkl", "rb") as f:
-            sort_task_list = pickle.load(f)
+            while True:
+                try:
+                    sort_task_list = pickle.load(f)
+                except EOFError:
+                    sort_task_list = []
+                    break
+        # sort_task_list의 첫
         # alert은 밑에 알림창을 울리게 함 그리고 이 메시지 박스는 내가 보고 있는 화면에 띄워짐
         QApplication.alert(QMessageBox.about(self, 'Message', '{time}\n{task}'.format( \
                                             time=list(list(sort_task_list.values())[0].keys())[0],

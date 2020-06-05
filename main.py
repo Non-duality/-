@@ -104,6 +104,7 @@ class MainWindow (QMainWindow, main_ui):
                 try:
                     sort_task_list = pickle.load(f)
                 except EOFError:
+                    sort_task_list = []
                     break
         
         if sort_task_list:
@@ -132,12 +133,9 @@ class MainWindow (QMainWindow, main_ui):
         return task_list
         
 
-
-
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main_dialog = MainWindow()
     main_dialog.show()
-    app.exec_()
+    if app.exec_() == 0 :
+        main_dialog.time_check_thread.wait()
