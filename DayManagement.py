@@ -9,7 +9,6 @@ import time as stime
 import sort_util
 import pickle
 
-sort_task_list = []
 sub_ui = uic.loadUiType('_uiFiles/sub.ui')[0]
 
 
@@ -31,7 +30,8 @@ class TimeThread(QThread):
         self.wait()
 
     def latest_task_time(self):
-        global sort_task_list
+        with open("task.pkl", "rb") as f:
+            sort_task_list = pickle.load(f)
         # sort_task_list의 첫 번쨰 키를 : 스플릿 함
         latest_time_keys = list(list(sort_task_list[0].values())[0].keys())[0].split(':')
 
@@ -56,11 +56,14 @@ class TimeThread(QThread):
 
     # TimeThread를 .start() 를하면 실행되는 함수
     def run(self):
-        global sort_task_list
         # 시간을 체크함
         while True:
+            with open("task.pkl", "rb") as f:
+                sort_task_list = pickle.load(f)
+  
             print(sort_task_list)
             if sort_task_list == []:
+                print("버그발견")
                 break
             # 제일 처음 task의 시간, 분 을 받아옴
             hour, minute, year, month, day = self.latest_task_time()
@@ -91,7 +94,7 @@ class TimeThread(QThread):
                     sort_task_list.pop(0)
                     with open("task.pkl", 'wb') as f:
                         pickle.dump(sort_task_list, f)
-
+            
             if year < now_year :
                 sort_task_list.pop(0)
                 with open("task.pkl", 'wb') as f:
@@ -137,14 +140,13 @@ class DayManagement(QWidget, sub_ui):
         '''
         시간과 할일 목록을 저장하는 함수
         '''
-        global sort_task_list
-        
         with open("task.pkl", "rb") as f:
             while True:
                 try:
                     sort_task_list = pickle.load(f)
                 except EOFError:
                     break
+
         if self.time_check(self.am_pm_toggle_value, self.set_time_hours.text(), self.set_time_minutes.text()):
             # am_pm을 받고 ap_or_pm:시간:분 저장
             year_month_day = "{year}:{month}:{day}:{week}".format(year = self.text_year.text(),
@@ -172,30 +174,18 @@ class DayManagement(QWidget, sub_ui):
             self.set_time_hours.clear()
             self.set_time_minutes.clear()
             self.set_task_text.clear()
-            # 쓰레드는 한 번만 실행되면 되기 떄문에 카운트가 0일 때만 실행 또는 하나만 있을 떄만 실행
-            if self.thread_count == 0 or len(sort_task_list) == 1:
-                print(self.thread_count)
-                print(len(self.task_list))
-                # TimeThread을 할당
-                self.time_check_thread = TimeThread()
-                # 메인 쓰레드가 종료되면 자식 쓰레드인 self.time_check_thread 종료
-                self.time_check_thread.daemon = True
-                # TimeThread에 있는 messagebox 시그널과 연결
-                self.time_check_thread.messagebox.connect(self.open_message_box)
-                # 쓰레드 실행
-                self.time_check_thread.start()
-                # 한 번만 실행되야 하기때문에 수를 올림
-                self.thread_count += 1
+
         else:
             pass
         return sort_task_list
 
     def open_message_box(self):
-        global sort_task_list
+        with open("task.pkl", "rb") as f:
+            sort_task_list = pickle.load(f)
         # alert은 밑에 알림창을 울리게 함 그리고 이 메시지 박스는 내가 보고 있는 화면에 띄워짐
         QApplication.alert(QMessageBox.about(self, 'Message', '{time}\n{task}'.format( \
-                                            time=list(sort_task_list[0].keys())[0],
-                                            task=list(sort_task_list[0].values())[0])))
+                                            time=list(list(sort_task_list.values())[0].keys())[0],
+                                            task=list(list(sort_task_list.values())[0].values())[0])))
 
     def am_pm_toggle(self, toggle):
         '''

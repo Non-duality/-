@@ -6,10 +6,10 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 from DayManagement import *
-sort_task_list = []
 main_ui = uic.loadUiType('_uiFiles/main.ui')[0]
 
 class MainWindow (QMainWindow, main_ui):
+    thread_count = 0
     
     def __init__(self):
         super().__init__()
@@ -19,7 +19,8 @@ class MainWindow (QMainWindow, main_ui):
         self.setupUi(self)
         self.setWindowTitle(' Scheldule Management')
         self.setWindowIcon(QIcon('image/icon.png'))
-        self.new_window = DayManagement() 
+        self.new_window = DayManagement()
+        self.Thread_Start()
 
         # 메뉴바
         exitAction = QAction(QIcon('image/exit.png'),'EXIT', self)
@@ -37,6 +38,27 @@ class MainWindow (QMainWindow, main_ui):
         self.pushButton.clicked.connect(self.clicked_option)
 
         self.show_data(date)
+
+    def Thread_Start(self):
+        with open("task.pkl", "rb") as f:
+            while True:
+                try:
+                    sort_task_list = pickle.load(f)
+                except EOFError:
+                    break
+        
+        if self.thread_count == 0 or len(sort_task_list) == 1:
+            print(self.thread_count)
+            # TimeThread을 할당
+            self.time_check_thread = TimeThread()
+            # 메인 쓰레드가 종료되면 자식 쓰레드인 self.time_check_thread 종료
+            self.time_check_thread.daemon = True
+            # TimeThread에 있는 messagebox 시그널과 연결
+            self.time_check_thread.messagebox.connect(self.new_window.open_message_box)
+            # 쓰레드 실행
+            self.time_check_thread.start()
+            # 한 번만 실행되야 하기때문에 수를 올림
+            self.thread_count += 1
 
     def sort_date(self,date):
         #Pyqt5.Qtcore.QDate는 데이터를 '월 5 13 2020' 식으로 데이터를 반납한다.
@@ -73,7 +95,6 @@ class MainWindow (QMainWindow, main_ui):
         self.new_window.text_week.setText(temp[0])
     
     def select_task(self, date):
-        global sort_task_list
         temp = self.splitDate(date)
         temp_task_list = []
         task_list = []
@@ -102,7 +123,6 @@ class MainWindow (QMainWindow, main_ui):
                     temp_task_list.pop(0)
                     temp_task_list.append(temp_time)
 
-                    print(temp_task_list)
                     task_list.append(temp_task_list[0])
                     temp_task_list.pop(0)
 
