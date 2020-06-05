@@ -379,7 +379,7 @@ border-color: rgb(0, 0, 0);</string>
        <string notr="true">font: 75 9pt &quot;나눔바른펜&quot;;</string>
       </property>
       <property name="text">
-       <string>TASK</string>
+       <string>To Do List</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -399,6 +399,9 @@ border-color: rgb(0, 0, 0);</string>
         <width>350</width>
         <height>245</height>
        </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 75 10pt &quot;나눔스퀘어&quot;;</string>
       </property>
      </widget>
     </item>

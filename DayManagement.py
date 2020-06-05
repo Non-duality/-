@@ -186,8 +186,8 @@ class DayManagement(QWidget, sub_ui):
         # sort_task_list의 첫
         # alert은 밑에 알림창을 울리게 함 그리고 이 메시지 박스는 내가 보고 있는 화면에 띄워짐
         QApplication.alert(QMessageBox.about(self, 'Message', '{time}\n{task}'.format( \
-                                            time=list(list(sort_task_list.values())[0].keys())[0],
-                                            task=list(list(sort_task_list.values())[0].values())[0])))
+                                            time=list(list(sort_task_list[0].values())[0].keys())[0],
+                                            task=list(list(sort_task_list[0].values())[0].values())[0])))
 
     def am_pm_toggle(self, toggle):
         '''
