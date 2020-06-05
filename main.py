@@ -11,11 +11,12 @@ main_ui = uic.loadUiType('_uiFiles/main.ui')[0]
 
 class MainWindow (QMainWindow, main_ui):
     thread_count = 0
+
     
     def __init__(self):
         super().__init__()
         self.initUI()
-    
+  
     def initUI(self):
         self.setupUi(self)
         self.setWindowTitle(' Scheldule Management')
@@ -37,7 +38,6 @@ class MainWindow (QMainWindow, main_ui):
         date = self.calendarWidget.selectedDate()
         self.calendarWidget.clicked[QDate].connect(self.show_data)
         self.pushButton.clicked.connect(self.add_task)
-
         self.show_data(date)
 
     def thread_Start(self):
@@ -71,6 +71,7 @@ class MainWindow (QMainWindow, main_ui):
     
     def show_data(self,date):
         # Label에 데이터를 기록하는 함수
+        self.paintCell()
         temp = self.splitDate(date)
         task_str = ""
 
@@ -108,7 +109,7 @@ class MainWindow (QMainWindow, main_ui):
                 year = int(date_y_m_d[0])
                 month = int(date_y_m_d[1])
                 day = int(date_y_m_d[2])
-            
+                
                 if int(temp[3]) == year and int(temp[1]) == month and int(temp[2]) == day :
                     #시간 데이터 담기
                     temp_time = list(list(task.values())[0].keys())[0]
@@ -126,8 +127,38 @@ class MainWindow (QMainWindow, main_ui):
             return sort_task_list
         
         return task_list
-        
 
+    def select_event(self):
+        event_list = []
+
+        with open("task.pkl", "rb") as f:
+            sort_task_list = []
+            while True:
+                try:
+                    sort_task_list = pickle.load(f)
+                except EOFError:
+                    break
+        
+        if sort_task_list:
+            for task in sort_task_list:
+                date_y_m_d = list(task.keys())[0].split(':')
+                year = date_y_m_d[0]
+                month = date_y_m_d[1].zfill(2)
+                day = date_y_m_d[2].zfill(2)
+
+                temp_str = year + month + day
+                temp_date = QDate.fromString(temp_str, "yyyyMMdd")
+                event_list.append(temp_date)
+        
+        return event_list
+    
+    def paintCell(self):
+        fm = QTextCharFormat()
+        # fm.setForeground(Qt.red)
+        fm.setBackground(QColor(204, 235, 255))
+        for date in self.select_event():
+            self.calendarWidget.setDateTextFormat(date,fm)
+                
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main_dialog = MainWindow()

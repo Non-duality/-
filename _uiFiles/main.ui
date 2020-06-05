@@ -97,7 +97,7 @@
        </property>
        <property name="styleSheet">
         <string notr="true">#qt_calendar_navigationbar {
-    background-color: rgb(0, 188, 212);
+    background-color: rgb(0, 182, 247);
     min-height: 50px;
 }
 #qt_calendar_prevmonth, #qt_calendar_nextmonth {
@@ -172,7 +172,7 @@ CalendarWidget QToolButton::menu-indicator {
 #qt_calendar_calendarview {
     outline: 0px;
 	font: 75 10pt &quot;나눔스퀘어 Bold&quot;;
-    selection-background-color: rgb(0, 188, 212); 
+    selection-background-color: rgb(0, 182, 247); 
 }
 </string>
        </property>

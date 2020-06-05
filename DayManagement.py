@@ -71,8 +71,7 @@ class TimeThread(QThread):
                 now_month = datetime.today().month
                 now_day = datetime.today().day
 
-                stime.sleep(1)
-
+                stime.sleep(2)
                 if year == now_year and month == now_month and day == now_day:
                     # 현재시각을 task_list 제일 처음의 시각을 받아서 비교해서 시간과 분이 같으면 메세지 실행
                     if now_hour == hour and now_minute == minute:
@@ -88,7 +87,7 @@ class TimeThread(QThread):
                         sort_task_list.pop(0)
                         with open("task.pkl", 'wb') as f:
                             pickle.dump(sort_task_list, f)
-                    if minute < now_minute :
+                    if hour <= now_hour and minute < now_minute :
                         sort_task_list.pop(0)
                         with open("task.pkl", 'wb') as f:
                             pickle.dump(sort_task_list, f)
