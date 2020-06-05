@@ -11,14 +11,12 @@ import pickle
 
 sub_ui = uic.loadUiType('_uiFiles/sub.ui')[0]
 
-
 class TimeThread(QThread):
     """
     시간을 설정하는 쓰레드
     """
     # 일반적으로 pyqt5에서는 메인 쓰레드가 아닌 경우에는 pyqt5의 messagebox나 새로운 윈도우창을 키는 행동을 할수가 없다
     # 그래서 message 박스를 불러오는 통로 같은것을 만드는 것
-
     messagebox = pyqtSignal()
     latest_time_hour = 0
     latest_time_minute = 0
@@ -27,16 +25,9 @@ class TimeThread(QThread):
         super().__init__()
 
     def __del__(self):
-        pass
+        self.wait()
 
-    def latest_task_time(self):
-        with open("task.pkl", "rb") as f:
-            while True:
-                try:
-                    sort_task_list = pickle.load(f)
-                except EOFError:
-                    sort_task_list = []
-                    break
+    def latest_task_time(self,sort_task_list):
         # sort_task_list의 첫 번쨰 키를 : 스플릿 함
         latest_time_keys = list(list(sort_task_list[0].values())[0].keys())[0].split(':')
 
@@ -61,69 +52,64 @@ class TimeThread(QThread):
 
     # TimeThread를 .start() 를하면 실행되는 함수
     def run(self):
-        # 시간을 체크함
+        sort_task_list = []
         while True:
             with open("task.pkl", "rb") as f:
                 while True:
                     try:
                         sort_task_list = pickle.load(f)
                     except EOFError:
-                        sort_task_list = []
                         break
-        # sort_task_list의 첫
-  
-            print(sort_task_list)
-            if sort_task_list == []:
-                print("버그발견")
-                break
-            # 제일 처음 task의 시간, 분 을 받아옴
-            hour, minute, year, month, day = self.latest_task_time()
-            # 현재 시간 분을 받아옴
-            now_hour = datetime.today().time().hour
-            now_minute = datetime.today().time().minute
-            now_year = datetime.today().year
-            now_month = datetime.today().month
-            now_day = datetime.today().day
+            
+            if sort_task_list :
+                # 제일 처음 task의 시간, 분 을 받아옴
+                hour, minute, year, month, day = self.latest_task_time(sort_task_list)
+                # 현재 시간 분을 받아옴
+                now_hour = datetime.today().time().hour
+                now_minute = datetime.today().time().minute
+                now_year = datetime.today().year
+                now_month = datetime.today().month
+                now_day = datetime.today().day
 
-            stime.sleep(5)
-            # 현재시각을 task_list 제일 처음의 시각을 받아서 비교해서 시간과 분이 같으면 메세지 실행
-            if now_hour == hour and now_minute == minute:
-                # 메인 view에서 messagebox와 connect와 연결된 함수를 싱햄
-                self.messagebox.emit()
-                # os.system('open /Users/goseonghyeon/study/ScheduleManagement/black.mp3')
-                stime.sleep(0.5)
-                sort_task_list.pop(0)
-                with open("task.pkl", 'wb') as f:
-                    pickle.dump(sort_task_list, f)
-            
-            if year == now_year and month == now_month and day == now_day:
-                if hour < now_hour :
+                stime.sleep(5)
+                    
+                if year == now_year and month == now_month and day == now_day:
+                    # 현재시각을 task_list 제일 처음의 시각을 받아서 비교해서 시간과 분이 같으면 메세지 실행
+                    if now_hour == hour and now_minute == minute:
+                        # 메인 view에서 messagebox와 connect와 연결된 함수를 싱햄
+                        self.messagebox.emit()
+                        # os.system('open /Users/goseonghyeon/study/ScheduleManagement/black.mp3')
+                        stime.sleep(0.5)
+                        sort_task_list.pop(0)
+                        with open("task.pkl", 'wb') as f:
+                            pickle.dump(sort_task_list, f)
+
+                    elif hour < now_hour :
+                        sort_task_list.pop(0)
+                        with open("task.pkl", 'wb') as f:
+                            pickle.dump(sort_task_list, f)
+                    elif minute < now_hour :
+                        sort_task_list.pop(0)
+                        with open("task.pkl", 'wb') as f:
+                            pickle.dump(sort_task_list, f)
+                    
+                elif year < now_year :
                     sort_task_list.pop(0)
                     with open("task.pkl", 'wb') as f:
                         pickle.dump(sort_task_list, f)
-                elif minute < now_hour :
+                elif month < now_month :
                     sort_task_list.pop(0)
                     with open("task.pkl", 'wb') as f:
                         pickle.dump(sort_task_list, f)
-            
-            if year < now_year :
-                sort_task_list.pop(0)
-                with open("task.pkl", 'wb') as f:
-                    pickle.dump(sort_task_list, f)
-            elif month < now_month :
-                sort_task_list.pop(0)
-                with open("task.pkl", 'wb') as f:
-                    pickle.dump(sort_task_list, f)
-            elif day < now_day :
-                sort_task_list.pop(0)
-                with open("task.pkl", 'wb') as f:
-                    pickle.dump(sort_task_list, f)
+                elif day < now_day :
+                    sort_task_list.pop(0)
+                    with open("task.pkl", 'wb') as f:
+                        pickle.dump(sort_task_list, f)
 
 
 class DayManagement(QWidget, sub_ui):
     am_pm_toggle_value = 'PM'
     task_list = []
-    thread_count = 0
 
     def __init__(self, parent=None):
         super(DayManagement, self).__init__(parent)
@@ -132,7 +118,7 @@ class DayManagement(QWidget, sub_ui):
 
     def initUI(self):
         self.setupUi(self)
-        self.setWindowTitle(' Task')
+        self.setWindowTitle(' To_do_list')
         self.setWindowIcon(QIcon('image/icon.png'))
 
         self.task_save_button.clicked.connect(self.task_save)
@@ -152,11 +138,11 @@ class DayManagement(QWidget, sub_ui):
         시간과 할일 목록을 저장하는 함수
         '''
         with open("task.pkl", "rb") as f:
+            sort_task_list = []
             while True:
                 try:
                     sort_task_list = pickle.load(f)
                 except EOFError:
-                    sort_task_list = []
                     break
 
         if self.time_check(self.am_pm_toggle_value, self.set_time_hours.text(), self.set_time_minutes.text()):
@@ -178,9 +164,8 @@ class DayManagement(QWidget, sub_ui):
             sort_task_list.append(overall_task)
             sort_task_list = sort_util.date_sort(sort_task_list)
 
-            print(sort_task_list)
             with open("task.pkl", 'wb') as f:
-                    pickle.dump(sort_task_list, f)
+                pickle.dump(sort_task_list, f)
 
             # 시간과 할일을 저장 후에 text 칸을 clear 시킨다
             self.set_time_hours.clear()
@@ -189,7 +174,7 @@ class DayManagement(QWidget, sub_ui):
 
         else:
             pass
-        return sort_task_list
+
 
     def open_message_box(self):
         with open("task.pkl", "rb") as f:
@@ -197,7 +182,6 @@ class DayManagement(QWidget, sub_ui):
                 try:
                     sort_task_list = pickle.load(f)
                 except EOFError:
-                    sort_task_list = []
                     break
         # sort_task_list의 첫
         # alert은 밑에 알림창을 울리게 함 그리고 이 메시지 박스는 내가 보고 있는 화면에 띄워짐

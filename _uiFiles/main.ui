@@ -174,7 +174,7 @@ border-color: rgb(0, 0, 0);</string>
         <enum>QFrame::Plain</enum>
        </property>
        <property name="text">
-        <string>Task List</string>
+        <string>To Do List</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignHCenter</set>

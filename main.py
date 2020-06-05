@@ -20,7 +20,7 @@ class MainWindow (QMainWindow, main_ui):
         self.setWindowTitle(' Scheldule Management')
         self.setWindowIcon(QIcon('image/icon.png'))
         self.new_window = DayManagement()
-        self.Thread_Start()
+        self.thread_Start()
 
         # 메뉴바
         exitAction = QAction(QIcon('image/exit.png'),'EXIT', self)
@@ -33,21 +33,15 @@ class MainWindow (QMainWindow, main_ui):
         filemenu.addAction(exitAction)
 
         # 클릭 함수
-        self.calendarWidget.clicked[QDate].connect(self.show_data)
         date = self.calendarWidget.selectedDate()
-        self.pushButton.clicked.connect(self.clicked_option)
+        self.calendarWidget.clicked[QDate].connect(self.show_data)
+        self.pushButton.clicked.connect(self.add_task)
 
         self.show_data(date)
 
-    def Thread_Start(self):
-        with open("task.pkl", "rb") as f:
-            while True:
-                try:
-                    sort_task_list = pickle.load(f)
-                except EOFError:
-                    break
+    def thread_Start(self):
         
-        if self.thread_count == 0 or len(sort_task_list) == 1:
+        if self.thread_count == 0 :
             print(self.thread_count)
             # TimeThread을 할당
             self.time_check_thread = TimeThread()
@@ -71,7 +65,7 @@ class MainWindow (QMainWindow, main_ui):
         temp = date.toString().split(' ')
         return temp
 
-    def clicked_option(self):
+    def add_task(self):
         self.new_window.show()
     
     def show_data(self,date):
@@ -100,11 +94,11 @@ class MainWindow (QMainWindow, main_ui):
         task_list = []
 
         with open("task.pkl", "rb") as f:
+            sort_task_list = []
             while True:
                 try:
                     sort_task_list = pickle.load(f)
                 except EOFError:
-                    sort_task_list = []
                     break
         
         if sort_task_list:
@@ -128,7 +122,7 @@ class MainWindow (QMainWindow, main_ui):
                     temp_task_list.pop(0)
 
         else:
-            return task_list
+            return sort_task_list
         
         return task_list
         
@@ -137,5 +131,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     main_dialog = MainWindow()
     main_dialog.show()
-    if app.exec_() == 0 :
-        main_dialog.time_check_thread.wait()
+    app.exec_()
