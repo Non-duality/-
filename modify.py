@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 
 modify_sub = uic.loadUiType("_uiFiles/modify_sub.ui")[0]
+check = False
 
 class ModifyList(QListWidget, modify_sub) :
     def __init__(self) :
@@ -76,6 +77,7 @@ class ModifyList(QListWidget, modify_sub) :
             pass
     
     def save_to_do_list(self):
+        global check
         sort_task_list = []
         item_list = []
         if range(self.list_widget.count()) == 0:
@@ -97,8 +99,26 @@ class ModifyList(QListWidget, modify_sub) :
 
                 with open("task.pkl", 'wb') as f:
                     pickle.dump(sort_task_list, f)
+                check = True
         
         else:
             with open("task.pkl", 'wb') as f:
                 pickle.dump(sort_task_list, f)
-            
+            check = True
+    
+    def closeEvent(self, event):
+        global check
+        if check:
+            check = False
+            event.accept()
+        else:
+            close = QMessageBox.question(self,
+                                        "QUIT",
+                                        "변경 사항을 저장 하시겠습니까?",
+                                        QMessageBox.Yes | QMessageBox.No)
+            if close == QMessageBox.Yes:
+                self.save_to_do_list()
+                check = False
+                event.accept()
+            else:
+                event.ignore()
