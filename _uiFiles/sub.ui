@@ -421,13 +421,13 @@ border-color: rgb(0, 0, 0);</string>
         <widget class="QPushButton" name="task_save_button">
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>300</width>
            <height>30</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>150</width>
+           <width>300</width>
            <height>30</height>
           </size>
          </property>
@@ -441,33 +441,6 @@ border-color: rgb(0, 0, 0);</string>
          </property>
          <property name="text">
           <string>SAVE</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="see_task_list_button">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>150</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">font: 75 10pt &quot;나눔스퀘어 Bold&quot;;
-background-color: rgb(255, 255, 255);
-border-radius: 5px;
-border-style: solid;
-border-width: 1px;
-border-color: rgb(0, 0, 0);</string>
-         </property>
-         <property name="text">
-          <string>LIST</string>
          </property>
         </widget>
        </item>
