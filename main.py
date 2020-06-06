@@ -77,6 +77,7 @@ class MainWindow (QMainWindow, main_ui):
     
     def show_data(self,date):
         # Label에 데이터를 기록하는 함수
+        self.calendarWidget.setDateTextFormat( QDate() , QTextCharFormat() )
         self.paintCell()
         temp = self.splitDate(date)
         task_str = ""
