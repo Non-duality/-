@@ -190,7 +190,7 @@ class DayManagement(QWidget, sub_ui):
                     break
         # 사용자 id 에 종합 변수에 지정한 텍스트 전송
         bot.sendMessage(chat_id = ID, text='테스트 메시지')
-        
+
         # sort_task_list의 첫
         # alert은 밑에 알림창을 울리게 함 그리고 이 메시지 박스는 내가 보고 있는 화면에 띄워짐
         QApplication.alert(QMessageBox.about(self, 'Message', '{time}\n{task}'.format( \
