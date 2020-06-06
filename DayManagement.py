@@ -9,6 +9,15 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
+import time as stime
+import sort_util
+import pickle
+import telegram
+
+token = '1055111326:AAENjj3nlcckuOSGnNVhd_wizU7veBGhqUs'    # token 변수에 텔레그램 토큰값 입력
+bot = telegram.Bot(token=token) # 텔레그램 봇에 token 변수에 저장한 토큰값 전송
+ID = '1199692231' # chat_id 저장을 위한 변수
+
 
 sub_ui = uic.loadUiType('_uiFiles/sub.ui')[0]
 
@@ -182,6 +191,11 @@ class DayManagement(QWidget, sub_ui):
                     sort_task_list = pickle.load(f)
                 except EOFError:
                     break
+                    
+        taskstring=list(list(sort_task_list[0].values())[0].values())[0]
+        # 사용자 id 에 종합 변수에 지정한 텍스트 전송
+        bot.sendMessage(chat_id = ID, text=taskstring)
+
         # sort_task_list의 첫
         # alert은 밑에 알림창을 울리게 함 그리고 이 메시지 박스는 내가 보고 있는 화면에 띄워짐
         QApplication.alert(QMessageBox.about(self, 'Message', '{time}\n{task}'.format( \
