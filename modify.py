@@ -29,6 +29,7 @@ else:
     QUITMESSAGE = "변경 사항을 저장 하시겠습니까?"
     
 check = False
+check_list = []
 
 class ModifyList(QListWidget, modify_sub) :
     def __init__(self) :
@@ -37,7 +38,6 @@ class ModifyList(QListWidget, modify_sub) :
     
     def initUI(self):
         self.setupUi(self)
-
 
         self.setWindowTitle(Titlename)
         self.setWindowIcon(QIcon('image/icon.png'))
@@ -68,7 +68,8 @@ class ModifyList(QListWidget, modify_sub) :
         self.list_widget.clear()
     
     def add_to_do_list(self):
-
+        global check_list
+        check_list.clear()
         self.list_widget.clear()
         with open("task.pkl", "rb") as f:
             sort_task_list = []
@@ -77,7 +78,14 @@ class ModifyList(QListWidget, modify_sub) :
                     sort_task_list = pickle.load(f)
                 except EOFError:
                     break
-        
+
+        with open("task.pkl", "rb") as f:
+            while True:
+                try:
+                    check_list = pickle.load(f)
+                except EOFError:
+                    break
+
         if sort_task_list:
             for task in sort_task_list:
                 date_y_m_d = list(task.keys())[0].split(':')
@@ -129,7 +137,19 @@ class ModifyList(QListWidget, modify_sub) :
     
     def closeEvent(self, event):
         global check
-        if check:
+        global check_list
+        with open("task.pkl", "rb") as f:
+            sort_task_list = []
+            while True:
+                try:
+                    sort_task_list = pickle.load(f)
+                    check_list = pickle.load(f)
+                except EOFError:
+                    break
+                
+        if check_list == sort_task_list :
+            event.accept() 
+        elif check:
             check = False
             event.accept()
         else:
