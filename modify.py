@@ -38,11 +38,7 @@ class ModifyList(QListWidget, modify_sub) :
     def initUI(self):
         self.setupUi(self)
 
-<<<<<<< Updated upstream
-        self.setWindowTitle(' Edit to do list')
-=======
         self.setWindowTitle(Titlename)
->>>>>>> Stashed changes
         self.setWindowIcon(QIcon('image/icon.png'))
 
         #ListWidget의 시그널
@@ -55,7 +51,6 @@ class ModifyList(QListWidget, modify_sub) :
         self.btn_saveItem.clicked.connect(self.save_to_do_list)
 
     def chkItemClicked(self) :
-        print(self.list_widget.currentItem().text())
         self.line_modify_item.setText(self.list_widget.currentItem().text())
     
     def modifyListWidget(self):
@@ -106,7 +101,7 @@ class ModifyList(QListWidget, modify_sub) :
         global check
         sort_task_list = []
         item_list = []
-        if range(self.list_widget.count()) == 0:
+        if self.list_widget.count() > 0:
             for index in range(self.list_widget.count()):
                 item_list = self.list_widget.item(index).text().split(" ")
                 date_list = item_list[0].split(".")
@@ -115,18 +110,17 @@ class ModifyList(QListWidget, modify_sub) :
                                                                     month = date_list[1],
                                                                     day = date_list[2],
                                                                     week = date_list[3])
-                # am_or_pm:시간:분 : 할일 해서 딕셔너리로 저장
+
                 time_and_task = {item_list[1] : item_list[2]}
                 overall_task = {year_month_day : time_and_task}
                 
-                # 시간과 할일을 task_list에 저장한다
                 sort_task_list.append(overall_task)
                 sort_task_list = sort_util.date_sort(sort_task_list)
 
                 with open("task.pkl", 'wb') as f:
                     pickle.dump(sort_task_list, f)
                 check = True
-        
+
         else:
             with open("task.pkl", 'wb') as f:
                 pickle.dump(sort_task_list, f)
@@ -139,17 +133,12 @@ class ModifyList(QListWidget, modify_sub) :
             event.accept()
         else:
             close = QMessageBox.question(self,
-<<<<<<< Updated upstream
-                                        "QUIT",
-                                        "Save changes?",
-=======
                                         QUIT,
                                         QUITMESSAGE,
->>>>>>> Stashed changes
                                         QMessageBox.Yes | QMessageBox.No)
             if close == QMessageBox.Yes:
                 self.save_to_do_list()
                 check = False
                 event.accept()
             else:
-                event.ignore()
+                event.accept()

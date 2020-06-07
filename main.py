@@ -29,8 +29,6 @@ else:
 
 
 
-languageflag = 1
-
 class MainWindow (QMainWindow, main_ui):
     thread_count = 0
 
@@ -57,21 +55,10 @@ class MainWindow (QMainWindow, main_ui):
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(qApp.quit)
         
-<<<<<<< Updated upstream
-        LangAction = QAction(QIcon('image/exit.png'),'To english', self)
-        LangAction.setShortcut('Ctrl+W')
-        exitAction.triggered.connect(qApp.quit)
-
-=======
->>>>>>> Stashed changes
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         filemenu = menubar.addMenu('&FILE')
         filemenu.addAction(exitAction)
-<<<<<<< Updated upstream
-        filemenu.addAction(LangAction)
-=======
->>>>>>> Stashed changes
         
         # 클릭 함수
         date = self.calendarWidget.selectedDate()
@@ -125,6 +112,7 @@ class MainWindow (QMainWindow, main_ui):
     
     def show_data(self,date):
         # Label에 데이터를 기록하는 함수
+        self.calendarWidget.setDateTextFormat( QDate() , QTextCharFormat() )
         self.paintCell()
         temp = self.splitDate(date)
         task_str = ""
@@ -137,11 +125,7 @@ class MainWindow (QMainWindow, main_ui):
             self.task_label.setText(task_str)
         
         else:
-<<<<<<< Updated upstream
-            self.task_label.setText("None")
-=======
             self.task_label.setText(Notask)
->>>>>>> Stashed changes
 
         self.new_window.text_year.setText(temp[3])
         self.new_window.text_month.setText(temp[1])
