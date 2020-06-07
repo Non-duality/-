@@ -20,15 +20,25 @@ LanguageFlag = GlobalVarlist['Language']
 
 if LanguageFlag == 'English' :
     main_ui = uic.loadUiType('_uiFiles/main_eng.ui')[0]
+    token_ui = uic.loadUiType('_uiFiles/token_eng.ui')[0]
     Notask = 'There is no task'
     Changelang = "한국어 사용"
+    SET = "&SET"
+    language = "Language"
+    Sel_lang_KOR = "Korean"
+    Sel_lang_ENG = "English"
+    Telegram = "Telegram"
 else:
     main_ui = uic.loadUiType('_uiFiles/main.ui')[0]
+    token_ui = uic.loadUiType('_uiFiles/token.ui')[0]
     Notask = '일정 없음'
     Changelang = "To english"
+    SET = "&설정"
+    language = "언어"
+    Sel_lang_KOR = "한국어"
+    Sel_lang_ENG = "영어"
+    Telegram = "텔레그렘"
     
-
-
 
 class MainWindow (QMainWindow, main_ui):
     thread_count = 0
@@ -45,6 +55,7 @@ class MainWindow (QMainWindow, main_ui):
         self.setWindowIcon(QIcon('image/icon.png'))
         self.new_window = DayManagement()
         self.new_window_modify = ModifyList()
+        self.token_widget = Token()
         self.thread_Start()
         
         # 언어 설정값이 English일 경우 달력 언어 변경
@@ -52,24 +63,18 @@ class MainWindow (QMainWindow, main_ui):
             self.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
 
         # 메뉴바
-        exitAction = QAction(QIcon('image/exit.png'),'EXIT', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.triggered.connect(qApp.quit)
-
-        select_korean = QAction('Korean', self)
-        select_english = QAction('English', self)
+        select_korean = QAction(Sel_lang_KOR, self)
+        select_english = QAction(Sel_lang_ENG, self)
         select_korean.triggered.connect(self.select_korea)
         select_english.triggered.connect(self.select_english)
 
-        setToken = QAction('Telegram',self)
-        #setToken.triggered.connect()
-        langMenu = QMenu('Language', self)
+        setToken = QAction(Telegram,self)
+        setToken.triggered.connect(self.token_edit)
+        langMenu = QMenu(language, self)
         
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
-        filemenu = menubar.addMenu('&FILE')
-        filemenu.addAction(exitAction)
-        setmenu = menubar.addMenu('&SET')
+        setmenu = menubar.addMenu(SET)
         setmenu.addMenu(langMenu)
         langMenu.addAction(select_korean)
         langMenu.addAction(select_english)
@@ -81,6 +86,9 @@ class MainWindow (QMainWindow, main_ui):
         self.pushButton.clicked.connect(self.add_task)
         self.modify_Button.clicked.connect(self.modify_task)
         self.show_data(date)
+
+    def token_edit(self):
+        self.token_widget.show()
         
     def ChangeLanguage(self):
         if LanguageFlag == 'English' :
@@ -149,6 +157,21 @@ class MainWindow (QMainWindow, main_ui):
         self.paintCell()
         temp = self.splitDate(date)
         task_str = ""
+        if LanguageFlag == 'English' :
+            if temp[0] == "월":
+                temp[0] = "Mon"
+            elif temp[0] == "화":
+                temp[0] = "Tue"
+            elif temp[0] == "수":
+                temp[0] = "Wed"
+            elif temp[0] == "목":
+                temp[0] = "Thu"
+            elif temp[0] == "금":
+                temp[0] = "Fri"
+            elif temp[0] == "토":
+                temp[0] = "Sat"
+            elif temp[0] == "일":
+                temp[0] = "Sun"
 
         self.time_label.setText(self.sort_date(date))
         
@@ -252,6 +275,43 @@ class MainWindow (QMainWindow, main_ui):
         with open('Config.ini', 'w') as configfile:
             config.write(configfile)
         os.execl(sys.executable, sys.executable, *sys.argv)
+
+class Token(QDialog, token_ui):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setupUi(self)
+        self.setWindowTitle(' Telegram')
+        self.setWindowIcon(QIcon('image/icon.png'))
+
+        config = configparser.ConfigParser()
+        config.read('Config.ini')
+        token_str = config.get('TelegramVar', 'token')
+        id_str = config.get('TelegramVar', 'id')
+
+        self.token_line.setText(token_str)
+        self.id_line.setText(id_str)
+
+        self.Save_button.clicked.connect(self.save_token)
+        self.Cancel_button.clicked.connect(self.close)
+    
+    def save_token(self):
+        token_str = self.token_line.text()
+        id_str = self.id_line.text()
+
+        config = configparser.ConfigParser()
+        config.read('Config.ini')
+        config.set('TelegramVar', 'token', token_str)
+        config.set('TelegramVar', 'id', id_str)
+
+        # save to a file
+        with open('Config.ini', 'w') as configfile:
+            config.write(configfile)
+        os.execl(sys.executable, sys.executable, *sys.argv)
+    
     
 if __name__ == "__main__":
     app = QApplication(sys.argv)

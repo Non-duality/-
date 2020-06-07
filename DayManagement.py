@@ -155,13 +155,6 @@ class DayManagement(QWidget, sub_ui):
         self.task_save_button.clicked.connect(self.task_save)
         self.am_or_pm_toggle_button.setCheckable(True)
         self.am_or_pm_toggle_button.clicked.connect(self.am_pm_toggle)
- 
-    def see_task_list(self):
-        '''
-        새로운 윈도우 창을 여는 함수로 TaskList를 불러와서 show 새로운 창을 염
-        '''
-        self.see_task_new_window = TaskList()
-        self.see_task_new_window.show()
 
     def task_save(self):
         '''
