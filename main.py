@@ -1,4 +1,4 @@
-import sys, pickle, sort_util
+import sys, pickle, sort_util, configparser, os
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -7,7 +7,28 @@ from PyQt5 import uic, QtCore
 from DayManagement import *
 from modify import ModifyList
 
-main_ui = uic.loadUiType('_uiFiles/main.ui')[0]
+# INI 설정 파일 불러오기
+config = configparser.ConfigParser()
+config.read('Config.ini')
+GlobalVarlist = config['GlobalVar']
+
+# 전역 설정값 가져오기
+GlobalVarlist = config['GlobalVar']
+
+# 언어 선택을 위한 설정값 불러오기
+LanguageFlag = GlobalVarlist['Language']
+
+if LanguageFlag == 'English' :
+    main_ui = uic.loadUiType('_uiFiles/main_eng.ui')[0]
+    Notask = 'There is no task'
+    Changelang = "한국어 사용"
+else:
+    main_ui = uic.loadUiType('_uiFiles/main.ui')[0]
+    Notask = '일정 없음'
+    Changelang = "To english"
+    
+
+
 
 class MainWindow (QMainWindow, main_ui):
     thread_count = 0
@@ -16,6 +37,7 @@ class MainWindow (QMainWindow, main_ui):
     def __init__(self):
         super().__init__()
         self.initUI()
+
   
     def initUI(self):
         self.setupUi(self)
@@ -24,23 +46,37 @@ class MainWindow (QMainWindow, main_ui):
         self.new_window = DayManagement()
         self.new_window_modify = ModifyList()
         self.thread_Start()
+        
+        # 언어 설정값이 English일 경우 달력 언어 변경
+        if LanguageFlag == 'English' :
+            self.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
 
         # 메뉴바
         exitAction = QAction(QIcon('image/exit.png'),'EXIT', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(qApp.quit)
-
+        
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         filemenu = menubar.addMenu('&FILE')
         filemenu.addAction(exitAction)
-
+        
         # 클릭 함수
         date = self.calendarWidget.selectedDate()
         self.calendarWidget.clicked[QDate].connect(self.show_data)
         self.pushButton.clicked.connect(self.add_task)
         self.modify_Button.clicked.connect(self.modify_task)
         self.show_data(date)
+        
+    def ChangeLanguage(self):
+        if LanguageFlag == 'English' :
+            config["GlobalVar"] = { "Language" : "Korean"};
+            config.write(handle);
+            #os.system("./main.py &")
+        else:
+            config["GlobalVar"] = { "Language" : "English"};
+            config.write(handle);
+            #os.system("./main.py &")
 
     def thread_Start(self):
         
@@ -90,7 +126,7 @@ class MainWindow (QMainWindow, main_ui):
             self.task_label.setText(task_str)
         
         else:
-            self.task_label.setText("일정 없음")
+            self.task_label.setText(Notask)
 
         self.new_window.text_year.setText(temp[3])
         self.new_window.text_month.setText(temp[1])

@@ -19,6 +19,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('Config.ini')
 TeleVarlist = config['TelegramVar']
+GlobalVarlist = config['GlobalVar']
 
 # 설정 파일에서 Token,ID 받아오기
 token = TeleVarlist['Token']
@@ -26,6 +27,17 @@ ID = TeleVarlist['ID']
 
 # 텔레그램 봇에 token 변수에 저장한 토큰값 전송
 bot = telegram.Bot(token=token) 
+
+
+# 언어 선택을 위한 설정값 불러오기
+LanguageFlag = GlobalVarlist['Language']
+
+if LanguageFlag == 'English' :
+    MustNumber = 'Please enter a "number" in hours or minutes.'
+    UnderNumber = 'Please enter a number less than 11 in hours and a number less than 59 in minutes.'
+else:
+    MustNumber = '시간 or 분에 숫자를 입력해주세요.'
+    UnderNumber = '시간에 11 이하의 숫자, 분에 59이하의 숫자를 입력해주세요.'
 
 
 sub_ui = uic.loadUiType('_uiFiles/sub.ui')[0]
@@ -53,6 +65,7 @@ class TimeThread(QThread):
         self.latest_time_year = int(date_y_m_d[0])
         self.latest_time_month = int(date_y_m_d[1])
         self.latest_time_day = int(date_y_m_d[2])
+        
 
         # self.am_pm_toggle_value가 PM 이면 12를 더해줘여함 datetime에서 1시는 13시로 표현함
         if latest_time_keys[0] == 'PM':
@@ -229,10 +242,10 @@ class DayManagement(QWidget, sub_ui):
         now_hour, now_minute = datetime.today().time().hour, datetime.today().time().minute
         # hour, minute가 숫자인지 검사
         if not hour.isdigit() or not minute.isdigit() or hour == '' or minute == '':
-            QMessageBox.about(self, 'Error', '시간 or 분에 숫자를 입력해주세요.')
+            QMessageBox.about(self, 'Error', MustNumber)
             return False
         elif int(hour) > 11 or int(minute) >= 60:
-            QMessageBox.about(self, 'Error', '시간에 11 이하의 숫자, 분에 59이하의 숫자를 입력해주세요.')
+            QMessageBox.about(self, 'Error', UnderNumber)
             return False
         elif am_pm == 'PM':
             # 오후 시간에는 시간이 느리면 저장 불가능

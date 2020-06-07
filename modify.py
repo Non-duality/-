@@ -1,11 +1,33 @@
 import sys, pickle, sort_util
+import configparser
 from datetime import datetime, time
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
 
-modify_sub = uic.loadUiType("_uiFiles/modify_sub.ui")[0]
+# INI 설정 파일 불러오기
+config = configparser.ConfigParser()
+config.read('Config.ini')
+GlobalVarlist = config['GlobalVar']
+
+# 전역 설정값 가져오기
+GlobalVarlist = config['GlobalVar']
+
+# 언어 선택을 위한 설정값 불러오기
+LanguageFlag = GlobalVarlist['Language']
+
+if LanguageFlag == 'English' :
+    modify_sub = uic.loadUiType("_uiFiles/modify_sub_eng.ui")[0]
+    Titlename = "Edit To Do List"
+    QUIT = "QUIT"
+    QUITMESSAGE = "Save Changes?"
+else:
+    modify_sub = uic.loadUiType("_uiFiles/modify_sub.ui")[0]
+    Titlename = "일정 목록 수정"
+    QUIT = "나가기"
+    QUITMESSAGE = "변경 사항을 저장 하시겠습니까?"
+    
 check = False
 
 class ModifyList(QListWidget, modify_sub) :
@@ -16,7 +38,8 @@ class ModifyList(QListWidget, modify_sub) :
     def initUI(self):
         self.setupUi(self)
 
-        self.setWindowTitle(' Modify To Do List')
+
+        self.setWindowTitle(Titlename)
         self.setWindowIcon(QIcon('image/icon.png'))
 
         #ListWidget의 시그널
@@ -111,8 +134,8 @@ class ModifyList(QListWidget, modify_sub) :
             event.accept()
         else:
             close = QMessageBox.question(self,
-                                        "QUIT",
-                                        "변경 사항을 저장 하시겠습니까?",
+                                        QUIT,
+                                        QUITMESSAGE,
                                         QMessageBox.Yes | QMessageBox.No)
             if close == QMessageBox.Yes:
                 self.save_to_do_list()

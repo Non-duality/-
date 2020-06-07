@@ -239,7 +239,7 @@ CalendarWidget QToolButton::menu-indicator {
 </string>
           </property>
           <property name="locale">
-           <locale language="Korean" country="SouthKorea"/>
+           <locale language="English" country="UnitedStates"/>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Plain</enum>
@@ -422,6 +422,9 @@ border-width: 1px;</string>
                <height>65</height>
               </size>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
              <property name="styleSheet">
               <string notr="true">font: 75 10pt &quot;나눔스퀘어 Bold&quot;;
 background-color: rgb(255, 255, 255);
@@ -431,7 +434,7 @@ border-width: 1px;
 border-color: rgb(0, 0, 0);</string>
              </property>
              <property name="text">
-              <string>ADD</string>
+              <string>Add task</string>
              </property>
             </widget>
            </item>
@@ -458,7 +461,7 @@ border-width: 1px;
 border-color: rgb(0, 0, 0);</string>
              </property>
              <property name="text">
-              <string>MODIFY</string>
+              <string>Edit task</string>
              </property>
             </widget>
            </item>
