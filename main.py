@@ -55,11 +55,25 @@ class MainWindow (QMainWindow, main_ui):
         exitAction = QAction(QIcon('image/exit.png'),'EXIT', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(qApp.quit)
+
+        select_korean = QAction('Korean', self)
+        select_english = QAction('English', self)
+        select_korean.triggered.connect(self.select_korea)
+        select_english.triggered.connect(self.select_english)
+
+        setToken = QAction('Telegram',self)
+        #setToken.triggered.connect()
+        langMenu = QMenu('Language', self)
         
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         filemenu = menubar.addMenu('&FILE')
         filemenu.addAction(exitAction)
+        setmenu = menubar.addMenu('&SET')
+        setmenu.addMenu(langMenu)
+        langMenu.addAction(select_korean)
+        langMenu.addAction(select_english)
+        setmenu.addAction(setToken)
         
         # 클릭 함수
         date = self.calendarWidget.selectedDate()
@@ -215,7 +229,30 @@ class MainWindow (QMainWindow, main_ui):
         fm.setBackground(QColor(204, 235, 255))
         for date in self.select_event():
             self.calendarWidget.setDateTextFormat(date,fm)
-                
+
+
+    def select_korea(self):
+        config = configparser.ConfigParser()
+        config.read('Config.ini')
+        global_val = config.get('GlobalVar', 'Language')
+        config.set('GlobalVar', 'Language', 'Korean')
+
+        # save to a file
+        with open('Config.ini', 'w') as configfile:
+            config.write(configfile)
+        os.execl(sys.executable, sys.executable, *sys.argv)
+    
+    def select_english(self):
+        config = configparser.ConfigParser()
+        config.read('Config.ini')
+        global_val = config.get('GlobalVar', 'Language')
+        config.set('GlobalVar', 'Language', 'English')
+
+        # save to a file
+        with open('Config.ini', 'w') as configfile:
+            config.write(configfile)
+        os.execl(sys.executable, sys.executable, *sys.argv)
+    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main_dialog = MainWindow()
