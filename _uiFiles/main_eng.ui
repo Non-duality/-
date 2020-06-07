@@ -176,6 +176,9 @@ CalendarWidget QToolButton::menu-indicator {
 }
 </string>
        </property>
+       <property name="locale">
+        <locale language="English" country="UnitedStates"/>
+       </property>
        <property name="firstDayOfWeek">
         <enum>Qt::Sunday</enum>
        </property>
@@ -409,7 +412,7 @@ border-width: 1px;</string>
             <widget class="QPushButton" name="pushButton">
              <property name="minimumSize">
               <size>
-               <width>200</width>
+               <width>150</width>
                <height>65</height>
               </size>
              </property>
@@ -428,7 +431,34 @@ border-width: 1px;
 border-color: rgb(0, 0, 0);</string>
              </property>
              <property name="text">
-              <string>Edit task</string>
+              <string>ADD</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="modify_Button">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 75 10pt &quot;나눔스퀘어 Bold&quot;;
+background-color: rgb(255, 255, 255);
+border-radius: 5px;
+border-style: solid;
+border-width: 1px;
+border-color: rgb(0, 0, 0);</string>
+             </property>
+             <property name="text">
+              <string>MODIFY</string>
              </property>
             </widget>
            </item>

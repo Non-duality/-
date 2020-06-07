@@ -1,13 +1,15 @@
-import sys
-import pickle
+import sys, pickle, sort_util
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic, QtCore
 from DayManagement import *
+from modify import ModifyList
 
 main_ui = uic.loadUiType('_uiFiles/main.ui')[0]
+
+languageflag = 1
 
 class MainWindow (QMainWindow, main_ui):
     thread_count = 0
@@ -22,22 +24,29 @@ class MainWindow (QMainWindow, main_ui):
         self.setWindowTitle(' Scheldule Management')
         self.setWindowIcon(QIcon('image/icon.png'))
         self.new_window = DayManagement()
+        self.new_window_modify = ModifyList()
         self.thread_Start()
 
         # 메뉴바
         exitAction = QAction(QIcon('image/exit.png'),'EXIT', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(qApp.quit)
+        
+        LangAction = QAction(QIcon('image/exit.png'),'To english', self)
+        LangAction.setShortcut('Ctrl+W')
+        exitAction.triggered.connect(qApp.quit)
 
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         filemenu = menubar.addMenu('&FILE')
         filemenu.addAction(exitAction)
-
+        filemenu.addAction(LangAction)
+        
         # 클릭 함수
         date = self.calendarWidget.selectedDate()
         self.calendarWidget.clicked[QDate].connect(self.show_data)
         self.pushButton.clicked.connect(self.add_task)
+        self.modify_Button.clicked.connect(self.modify_task)
         self.show_data(date)
 
     def thread_Start(self):
@@ -68,6 +77,10 @@ class MainWindow (QMainWindow, main_ui):
 
     def add_task(self):
         self.new_window.show()
+
+    def modify_task(self):
+        self.new_window_modify.show()
+        self.new_window_modify.add_to_do_list()
     
     def show_data(self,date):
         # Label에 데이터를 기록하는 함수
@@ -83,7 +96,7 @@ class MainWindow (QMainWindow, main_ui):
             self.task_label.setText(task_str)
         
         else:
-            self.task_label.setText("일정 없음")
+            self.task_label.setText("None")
 
         self.new_window.text_year.setText(temp[3])
         self.new_window.text_month.setText(temp[1])
@@ -92,7 +105,6 @@ class MainWindow (QMainWindow, main_ui):
     
     def select_task(self, date):
         temp = self.splitDate(date)
-        temp_task_list = []
         task_list = []
 
         with open("task.pkl", "rb") as f:
@@ -114,14 +126,11 @@ class MainWindow (QMainWindow, main_ui):
                     #시간 데이터 담기
                     temp_time = list(list(task.values())[0].keys())[0]
                     #일정 데이터 담기
-                    temp_task_list = list(list(task.values())[0].values())[0].split(':')
+                    temp_task = list(list(task.values())[0].values())[0]
                     temp_time = "[ " + temp_time + " ] "
-                    temp_time = temp_time + temp_task_list[0]
-                    temp_task_list.pop(0)
-                    temp_task_list.append(temp_time)
+                    temp_time = temp_time + temp_task
 
-                    task_list.append(temp_task_list[0])
-                    temp_task_list.pop(0)
+                    task_list.append(temp_time)
 
         else:
             return sort_task_list
