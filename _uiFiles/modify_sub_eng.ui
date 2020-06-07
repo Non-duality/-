@@ -190,7 +190,7 @@ border-width: 1px;
 border-color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>Reset</string>
+         <string>Clear</string>
         </property>
        </widget>
       </item>

@@ -38,6 +38,7 @@ class ModifyList(QListWidget, modify_sub) :
     def initUI(self):
         self.setupUi(self)
 
+
         self.setWindowTitle(Titlename)
         self.setWindowIcon(QIcon('image/icon.png'))
 

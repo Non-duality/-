@@ -176,6 +176,9 @@ CalendarWidget QToolButton::menu-indicator {
 }
 </string>
        </property>
+       <property name="locale">
+        <locale language="English" country="UnitedStates"/>
+       </property>
        <property name="firstDayOfWeek">
         <enum>Qt::Sunday</enum>
        </property>

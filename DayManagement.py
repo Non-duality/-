@@ -28,6 +28,7 @@ ID = TeleVarlist['ID']
 # 텔레그램 봇에 token 변수에 저장한 토큰값 전송
 bot = telegram.Bot(token=token) 
 
+
 # 언어 선택을 위한 설정값 불러오기
 LanguageFlag = GlobalVarlist['Language']
 
