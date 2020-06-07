@@ -105,7 +105,7 @@ border-width: 1px;
 border-color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>Modify</string>
+         <string>Edit</string>
         </property>
        </widget>
       </item>
@@ -163,7 +163,7 @@ border-width: 1px;
 border-color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>Remove</string>
+         <string>Delete</string>
         </property>
        </widget>
       </item>
@@ -190,7 +190,7 @@ border-width: 1px;
 border-color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>Clear</string>
+         <string>Reset</string>
         </property>
        </widget>
       </item>

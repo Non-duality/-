@@ -50,7 +50,7 @@
        <string notr="true">font: 81 12pt &quot;나눔스퀘어 Bold&quot;;</string>
       </property>
       <property name="text">
-       <string>To Do List</string>
+       <string>일정 목록</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
