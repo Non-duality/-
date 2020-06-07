@@ -13,10 +13,19 @@ import time as stime
 import sort_util
 import pickle
 import telegram
+import configparser
 
-token = '1055111326:AAENjj3nlcckuOSGnNVhd_wizU7veBGhqUs'    # token 변수에 텔레그램 토큰값 입력
-bot = telegram.Bot(token=token) # 텔레그램 봇에 token 변수에 저장한 토큰값 전송
-ID = '1199692231' # chat_id 저장을 위한 변수
+# INI 설정 파일 불러오기
+config = configparser.ConfigParser()
+config.read('Config.ini')
+TeleVarlist = config['TelegramVar']
+
+# 설정 파일에서 Token,ID 받아오기
+token = TeleVarlist['Token']
+ID = TeleVarlist['ID']
+
+# 텔레그램 봇에 token 변수에 저장한 토큰값 전송
+bot = telegram.Bot(token=token) 
 
 
 sub_ui = uic.loadUiType('_uiFiles/sub.ui')[0]
