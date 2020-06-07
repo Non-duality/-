@@ -97,7 +97,25 @@ class MainWindow (QMainWindow, main_ui):
         #Pyqt5.Qtcore.QDate는 데이터를 '월 5 13 2020' 식으로 데이터를 반납한다.
         #그리하여 이를 한국식으로 변환함
         temp = date.toString().split(' ')
-        time = "{}년 {}월 {}일 {}요일".format(temp[3],temp[1],temp[2],temp[0])
+        if LanguageFlag == 'English' :
+            if temp[0] == "월":
+                temp[0] = "Mon"
+            elif temp[0] == "화":
+                temp[0] = "Tue"
+            elif temp[0] == "수":
+                temp[0] = "Wed"
+            elif temp[0] == "목":
+                temp[0] = "Thu"
+            elif temp[0] == "금":
+                temp[0] = "Fri"
+            elif temp[0] == "토":
+                temp[0] = "Sat"
+            elif temp[0] == "일":
+                temp[0] = "Sun"
+
+            time = "{}, {} - {} - {}".format(temp[0],temp[1],temp[2],temp[3])
+        else :
+            time = "{}년 {}월 {}일 {}요일".format(temp[3],temp[1],temp[2],temp[0])
         return time
     
     def splitDate(self,date):
